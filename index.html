@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lidah — peta bahasa ibu di Indonesia</title>
+    <meta
+      name="description"
+      content="727 bahasa ibu dituturkan di Indonesia, dan sebagian besar terancam. Peta setiap bahasa menurut status keterancaman dan rumpunnya, bahasa terdekat dari kabupaten/kotamu, dan silsilah tiap bahasa, dari data Glottolog."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lidah.vercel.app/" />
+    <meta property="og:title" content="Lidah — peta bahasa ibu di Indonesia" />
+    <meta property="og:description" content="727 bahasa ibu, hanya sebagian kecil yang aman. Lihat bahasa di sekitar daerahmu." />
+    <meta property="og:image" content="https://lidah.vercel.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://lidah.vercel.app/" />
+    <meta name="theme-color" content="#f5f2ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121417" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/ikon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="kepala">
+      <a class="merek" href="/">
+        <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 11c0-4 4-7 9-7s9 3 9 7-3 6-6 6l-2 6-3-6c-4 0-7-2-7-6Z" class="merek-bentuk" /></svg>
+        Lidah
+      </a>
+      <nav><a href="#wilayah">Wilayah</a><a href="#daerahmu">Daerahmu</a><a href="#rumpun">Rumpun</a><a href="#cari">Cari</a></nav>
+    </header>
+
+    <main>
+      <section class="pembuka" aria-labelledby="judul">
+        <p class="label">Bahasa ibu di Indonesia · Glottolog <span data-versi>5.2.1</span></p>
+        <h1 id="judul"><span data-total>727</span> bahasa. Hanya <em data-aman>132</em> yang aman.</h1>
+        <p class="lead">
+          Indonesia termasuk negara dengan bahasa terbanyak di dunia. Setiap titik di peta ini satu bahasa ibu, di tempat
+          penuturnya tinggal. Sebagian besar tidak lagi sepenuhnya diwariskan ke anak-anak.
+        </p>
+
+        <div class="batang-status" data-batang-status role="img"></div>
+
+        <div class="alat-peta">
+          <div class="pilihan" role="group" aria-label="Warnai menurut">
+            <button type="button" data-warna="status" aria-pressed="true">Status</button>
+            <button type="button" data-warna="rumpun" aria-pressed="false">Rumpun</button>
+          </div>
+          <ul class="legenda" data-legenda></ul>
+        </div>
+        <div class="peta" id="peta" role="img" aria-label="Peta bahasa ibu di Indonesia"></div>
+        <p class="catatan">Arahkan kursor ke titik untuk nama bahasanya, ketuk untuk rinciannya.</p>
+        <div class="kartu" data-kartu-peta hidden></div>
+      </section>
+
+      <section class="bagian" id="wilayah" aria-labelledby="judul-wilayah">
+        <p class="label">Per wilayah</p>
+        <h2 id="judul-wilayah">Paling beragam, paling <em>rapuh</em></h2>
+        <p class="pengantar" data-pengantar-wilayah></p>
+        <div class="grafik-wilayah" data-wilayah></div>
+      </section>
+
+      <section class="bagian" id="daerahmu" aria-labelledby="judul-daerah">
+        <p class="label">Di sekitar daerahmu</p>
+        <h2 id="judul-daerah">Bahasa apa yang <em>paling dekat?</em></h2>
+        <form class="cari-baris" id="cari-daerah" autocomplete="off">
+          <div class="combo">
+            <label for="daerah" class="sr-only">Kabupaten atau kota</label>
+            <input id="daerah" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="saran-daerah" placeholder="Ketik kabupaten atau kota" spellcheck="false" />
+            <ul id="saran-daerah" role="listbox" class="saran" hidden></ul>
+          </div>
+        </form>
+        <div class="daerah-grid">
+          <div class="peta-kecil" id="peta-kecil"></div>
+          <ol class="daftar" data-dekat></ol>
+        </div>
+        <p class="catatan">
+          Glottolog mencatat satu titik untuk tiap bahasa, kira-kira di pusat wilayah tuturnya. Bahasa besar seperti Jawa
+          dituturkan jauh melampaui titiknya.
+        </p>
+      </section>
+
+      <section class="bagian" id="rumpun" aria-labelledby="judul-rumpun">
+        <p class="label">Rumpun</p>
+        <h2 id="judul-rumpun">Satu rumpun besar, <em>puluhan</em> yang kecil</h2>
+        <div class="rumpun-grid">
+          <div class="rumpun-teks" data-rumpun-teks></div>
+          <div class="grafik-rumpun" data-rumpun></div>
+        </div>
+      </section>
+
+      <section class="bagian" id="cari" aria-labelledby="judul-cari">
+        <p class="label">Cari bahasa</p>
+        <h2 id="judul-cari">Silsilah sebuah <em>bahasa</em></h2>
+        <form class="cari-baris" id="cari-bahasa" autocomplete="off">
+          <div class="combo">
+            <label for="bahasa" class="sr-only">Nama bahasa</label>
+            <input id="bahasa" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="saran-bahasa" placeholder="Ketik nama bahasa, misalnya Sunda atau Asmat" spellcheck="false" />
+            <ul id="saran-bahasa" role="listbox" class="saran" hidden></ul>
+          </div>
+        </form>
+        <div class="kartu" data-kartu></div>
+      </section>
+
+      <section class="bagian tentang" id="tentang" aria-labelledby="judul-tentang">
+        <h2 id="judul-tentang">Tentang data</h2>
+        <ul>
+          <li data-sitasi></li>
+          <li>
+            Yang dihitung adalah languoid tingkat bahasa (bukan dialek) berkategori bahasa ibu lisan yang tercatat dituturkan di
+            Indonesia, termasuk yang juga dituturkan di negara tetangga. Bahasa isyarat, pijin, dan entri pencatatan tidak
+            disertakan. Batas antara bahasa dan dialek selalu bisa diperdebatkan, jadi sumber lain memberi angka yang berbeda.
+          </li>
+          <li>
+            Status keterancaman adalah Agglomerated Endangerment Status dari Glottolog, yang menggabungkan beberapa sumber; namanya
+            di sini mengikuti padanan istilah UNESCO. Status bisa sudah berubah sejak sumbernya dicatat.
+          </li>
+          <li>
+            Wilayah dan daerah terdekat ditentukan dari titik tengah kabupaten/kota yang paling dekat dengan titik bahasa
+            (geoBoundaries: BPS, WFP, OCHA ROAP, CC BY 3.0 IGO). Sebagian nama bahasa diberi padanan Indonesia; selebihnya
+            memakai nama Glottolog.
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="kaki">
+      <p>Dibuat oleh Rafi Fernandito · <a href="https://github.com/Reverseflash45/lidah">kode sumber</a></p>
+    </footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

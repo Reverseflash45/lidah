@@ -2,7 +2,7 @@
 
 ![Lidah: 727 bahasa, hanya 132 yang aman](public/og.png)
 
-**[Buka Lidah](https://lidah.vercel.app)**
+**[Buka Lidah](https://lidah.raffstw.my.id)**
 
 Peta 727 bahasa ibu yang dituturkan di Indonesia, dari data
 [Glottolog](https://glottolog.org) 5.2.1. Hanya 132 di antaranya yang aman; sisanya rentan,

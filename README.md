@@ -39,8 +39,9 @@ bahasa, jadi bahasa besar seperti Jawa dituturkan jauh melampaui titiknya.
 
 ## Warna
 
-Status memakai skala urut satu rona, rumpun memakai dua warna kategorikal; keduanya
-divalidasi untuk mode terang dan gelap serta untuk buta warna.
+Tampilan malam ungu terong: tiap bahasa satu titik cahaya. Status memakai skala urut
+satu rona merah muda, makin redup makin terancam; rumpun memakai dua warna kategorikal.
+Keduanya divalidasi untuk buta warna di atas latar gelap.
 
 ## Menjalankan
 

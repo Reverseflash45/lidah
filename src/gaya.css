@@ -1,56 +1,31 @@
 :root {
-  color-scheme: light;
-  --kertas: #f5f2ec;
-  --kertas-2: #ece7de;
-  --kertas-3: #dfd8cc;
-  --tinta: #191b20;
-  --tinta-2: #44474f;
-  --samar: #656871;
-  --garis: #d8d2c6;
-  --garis-kuat: #b5ad9e;
-  --aksen: #a6431c;
-  --darat: #ddd5c7;
-  --laut: #ebe6dc;
-  --sorot: #2f4fa3;
-  /* status keterancaman: satu rona, makin gelap makin terancam (divalidasi ordinal) */
-  --s1: #dd9a70;
-  --s2: #cf7a4d;
-  --s3: #b95a30;
-  --s4: #96401e;
-  --s5: #6c2a12;
-  --s6: #43180a;
-  --s0: #b8b3aa;
+  /* ribuan suara di malam hari: ungu terong, tiap bahasa satu titik cahaya */
+  color-scheme: dark;
+  --kertas: #1f1430;
+  --kertas-2: #281a3d;
+  --kertas-3: #33224c;
+  --tinta: #f3eefa;
+  --tinta-2: #cfc4e0;
+  --samar: #a598bd;
+  --garis: #3a2a55;
+  --garis-kuat: #57447a;
+  --aksen: #f772b6;
+  --darat: #2c2140;
+  --laut: #1a1029;
+  --sorot: #8fd3ff;
+  /* status keterancaman: makin redup makin terancam (divalidasi ordinal di atas --darat) */
+  --s1: #ffc6de;
+  --s2: #fa9fc8;
+  --s3: #ec7cb0;
+  --s4: #d35f98;
+  --s5: #b04a80;
+  --s6: #8a3a67;
+  --s0: #5a4c6e;
   /* rumpun (kategorikal, divalidasi) */
-  --austronesia: #2c6e9e;
-  --papua: #c0641c;
-  --serif: "Newsreader Variable", Georgia, serif;
-  --huruf: "Inter Tight Variable", system-ui, sans-serif;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --kertas: #121417;
-    --kertas-2: #1a1d21;
-    --kertas-3: #24282d;
-    --tinta: #ece8e1;
-    --tinta-2: #c3c0b9;
-    --samar: #97948d;
-    --garis: #2b2f35;
-    --garis-kuat: #40454d;
-    --aksen: #f09a6a;
-    --darat: #2a2e34;
-    --laut: #16191c;
-    --sorot: #8fb0ff;
-    --s1: #7a3c20;
-    --s2: #9a4a26;
-    --s3: #bb5e30;
-    --s4: #d87a45;
-    --s5: #ef9f6d;
-    --s6: #ffcaa8;
-    --s0: #4b4f56;
-    --austronesia: #4f97cf;
-    --papua: #cf7229;
-  }
+  --austronesia: #2a9fca;
+  --papua: #7ea31c;
+  --serif: "Instrument Serif", Georgia, serif;
+  --huruf: "Hanken Grotesk Variable", system-ui, sans-serif;
 }
 
 *,
@@ -60,9 +35,12 @@
 }
 body {
   margin: 0;
-  background: var(--kertas);
   color: var(--tinta);
   font: 400 16px/1.6 var(--huruf);
+  background:
+    radial-gradient(70% 600px at 85% -10%, rgb(247 114 182 / 0.16), transparent 70%),
+    radial-gradient(50% 500px at 0% 20%, rgb(42 159 202 / 0.1), transparent 70%),
+    var(--kertas);
 }
 a {
   color: inherit;
@@ -103,8 +81,9 @@ h1,
 h2,
 h3 {
   font-family: var(--serif);
-  font-weight: 500;
-  letter-spacing: -0.015em;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 h1 {
   margin: 12px 0 0;
@@ -115,6 +94,7 @@ h1 {
 h1 em,
 h2 em {
   color: var(--aksen);
+  text-shadow: 0 0 24px rgb(247 114 182 / 0.45);
 }
 h2 {
   margin: 8px 0 0;
@@ -179,7 +159,7 @@ main,
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  font: 600 26px/1 var(--serif);
+  font: 400 26px/1 var(--serif);
 }
 .merek svg {
   width: 28px;
@@ -345,7 +325,7 @@ main,
   box-shadow: 0 8px 22px rgb(0 0 0 / 0.2);
 }
 .tip b {
-  font: 600 16px var(--serif);
+  font: 400 16px var(--serif);
 }
 .tip .redup {
   color: color-mix(in srgb, var(--kertas) 72%, transparent);
@@ -473,7 +453,7 @@ main,
 }
 .nama-wilayah strong {
   display: block;
-  font: 600 19px var(--serif);
+  font: 400 19px var(--serif);
 }
 .nama-wilayah span,
 .angka-wilayah span {
@@ -601,7 +581,7 @@ main,
   padding: 0;
   border: 0;
   background: none;
-  font: 600 20px var(--serif);
+  font: 400 20px var(--serif);
   text-decoration: underline;
   text-decoration-color: var(--garis-kuat);
   text-underline-offset: 4px;
@@ -635,7 +615,7 @@ main,
 }
 .angka-besar {
   margin: 0;
-  font: 500 clamp(56px, 7vw, 84px) / 1 var(--serif);
+  font: 400 clamp(56px, 7vw, 84px) / 1 var(--serif);
 }
 .r-austronesia-teks {
   color: var(--austronesia);

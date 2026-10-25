@@ -1,5 +1,6 @@
-import "@fontsource-variable/newsreader";
-import "@fontsource-variable/inter-tight";
+import "@fontsource/instrument-serif/400.css";
+import "@fontsource/instrument-serif/400-italic.css";
+import "@fontsource-variable/hanken-grotesk";
 import "./gaya.css";
 import {
   type Bahasa,

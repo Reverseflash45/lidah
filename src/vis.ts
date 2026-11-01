@@ -6,7 +6,8 @@ import type { GeometryCollection, Topology } from "topojson-specification";
 import { type Bahasa, type BahasaDekat, BAHASA, type Daerah, NAMA_RUMPUN, NAMA_STATUS, type Status, URUT_STATUS, WILAYAH, namaTampil, rumpunOf, statusOf } from "./data";
 
 export const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
-const angka = (n: number) => n.toLocaleString("id-ID");
+/** Pemisah ribuan id-ID tanpa Intl: membangun formatter ICU pertama kali memakan puluhan ms di HP. */
+const angka = (n: number) => (Number.isInteger(n) ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".") : n.toLocaleString("id-ID"));
 const persen = (a: number, b: number) => `${Math.round((a / b) * 100)}%`;
 
 export function buatTip(wadah: HTMLElement) {

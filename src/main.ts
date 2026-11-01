@@ -28,7 +28,8 @@ import { type Peta, esc, gambarBatangStatus, gambarPetaBesar, gambarPetaKecil, g
 
 const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s)!;
 const $$ = <T extends Element = HTMLElement>(s: string) => [...document.querySelectorAll<T>(s)];
-const angka = (n: number) => n.toLocaleString("id-ID");
+/** Pemisah ribuan id-ID tanpa Intl: membangun formatter ICU pertama kali memakan puluhan ms di HP. */
+const angka = (n: number) => (Number.isInteger(n) ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".") : n.toLocaleString("id-ID"));
 
 /* ---------- keadaan ---------- */
 const hash = new URLSearchParams(location.hash.slice(1));

@@ -142,7 +142,9 @@ function gambarDaerah() {
         <span class="rinci"><i class="s-${statusOf(b)}"></i>${NAMA_STATUS[statusOf(b)]} · ${b.rumpun === "Austronesian" ? "Austronesia" : esc(b.rumpun)} · ${angka(Math.round(b.jarak))} km</span></li>`,
     )
     .join("");
-  if (peta) gambarPetaKecil($("#peta-kecil"), peta, daerahTerpilih, dekat);
+  // Peta kecil menggambar ulang seluruh garis pantai; tunggu sampai bagiannya hampir terlihat.
+  if (peta && petaKecilTerlihat) gambarPetaKecil($("#peta-kecil"), peta, daerahTerpilih, dekat);
+
   masukDaerah.value = daerahTerpilih.nama;
   $("[data-tetangga]").innerHTML = htmlTetangga(daerahTerpilih.id, daerahTerpilih.nama, "lidah");
 
@@ -271,6 +273,20 @@ new ResizeObserver(([e]) => {
 }).observe(document.querySelector("main")!);
 
 /* ---------- mulai ---------- */
+let petaKecilTerlihat = !("IntersectionObserver" in window);
+if (!petaKecilTerlihat) {
+  const io = new IntersectionObserver(
+    (isi) => {
+      if (!isi.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      petaKecilTerlihat = true;
+      gambarDaerah();
+    },
+    { rootMargin: "300px 0px" },
+  );
+  io.observe($("#peta-kecil"));
+}
+
 $("[data-sitasi]").innerHTML = `Data bahasa: ${esc(SITASI)} (<a href="https://glottolog.org">glottolog.org</a>, CC BY 4.0).`;
 gambarPembuka();
 gambarPeta();

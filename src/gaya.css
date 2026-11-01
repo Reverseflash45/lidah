@@ -735,3 +735,11 @@ main,
     grid-template-columns: 120px minmax(0, 1fr);
   }
 }
+
+/* Peta kecil digambar saat hampir terlihat; tingginya min(lebar, 420px) × 0,85 (lihat gambarPetaKecil). */
+.peta-kecil:empty {
+  /* width eksplisit: tanpa ini aspect-ratio + max-height ikut menyempitkan kotak, dan peta digambar terlalu kecil */
+  width: 100%;
+  aspect-ratio: 1 / 0.85;
+  max-height: 357px;
+}

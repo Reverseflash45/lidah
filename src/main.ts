@@ -24,7 +24,7 @@ import {
   terdekat,
 } from "./data";
 import { htmlTetangga } from "./tetangga";
-import { type Peta, esc, gambarBatangStatus, gambarPetaBesar, gambarPetaKecil, gambarRumpun, gambarWilayah, legendaRumpun, legendaStatus, muatPeta } from "./vis";
+import { type Peta, esc, gambarBatangStatus, gambarPetaBesar, gambarPetaKecil, gambarRumpun, gambarWilayah, legendaRumpun, legendaStatus, muatDarat, muatPeta } from "./vis";
 
 const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s)!;
 const $$ = <T extends Element = HTMLElement>(s: string) => [...document.querySelectorAll<T>(s)];
@@ -38,6 +38,7 @@ let daerahTerpilih: Daerah = DAERAH.find((d) => d.id === hash.get("daerah")) ?? 
 let warna: "status" | "rumpun" = "status";
 let terpilihPeta: string | null = null;
 let peta: Peta | null = null;
+let darat: Awaited<ReturnType<typeof muatDarat>> | null = null;
 
 function simpanHash() {
   history.replaceState(null, "", `#bahasa=${bahasaTerpilih.id}&daerah=${daerahTerpilih.id}`);
@@ -101,8 +102,8 @@ function gambarPembuka() {
 function gambarPeta() {
   $("[data-legenda]").innerHTML = warna === "status" ? legendaStatus() : legendaRumpun();
   $$<HTMLButtonElement>("[data-warna]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.warna === warna)));
-  if (!peta) return;
-  gambarPetaBesar($("#peta"), peta, warna, terpilihPeta, (id) => {
+  if (!darat) return;
+  gambarPetaBesar($("#peta"), darat, warna, terpilihPeta, (id) => {
     terpilihPeta = id;
     const b = cariId(id)!;
     const kartu = $("[data-kartu-peta]");
@@ -280,7 +281,7 @@ if (!petaKecilTerlihat) {
       if (!isi.some((e) => e.isIntersecting)) return;
       io.disconnect();
       petaKecilTerlihat = true;
-      gambarDaerah();
+      muatPetaLengkap();
     },
     { rootMargin: "300px 0px" },
   );
@@ -294,12 +295,27 @@ gambarBagianWilayah();
 gambarDaerah();
 gambarBagianRumpun();
 tampilKartuBahasa(bahasaTerpilih);
-muatPeta()
-  .then((p) => {
-    peta = p;
+muatDarat()
+  .then((d) => {
+    darat = d;
     gambarPeta();
-    gambarDaerah();
   })
   .catch(() => {
     $("#peta").innerHTML = `<p class="gagal">Peta gagal dimuat. Muat ulang halaman.</p>`;
   });
+
+// Peta lengkap (batas tiap daerah) hanya untuk peta kecil, jadi baru diunduh saat bagiannya hampir terlihat.
+let petaDimuat = false;
+function muatPetaLengkap() {
+  if (petaDimuat) return gambarDaerah();
+  petaDimuat = true;
+  muatPeta()
+    .then((p) => {
+      peta = p;
+      gambarDaerah();
+    })
+    .catch(() => {
+      $("#peta-kecil").innerHTML = `<p class="gagal">Peta gagal dimuat. Muat ulang halaman.</p>`;
+    });
+}
+if (petaKecilTerlihat) muatPetaLengkap();

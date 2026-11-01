@@ -1,4 +1,4 @@
-import type { Feature, FeatureCollection, Geometry, MultiLineString } from "geojson";
+import type { Feature, FeatureCollection, Geometry, MultiLineString, MultiPolygon } from "geojson";
 import { geoMercator, geoPath } from "d3-geo";
 import { feature, mesh } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
@@ -36,6 +36,12 @@ export const isiTip = (b: Bahasa) =>
 type Prop = { id: string };
 export type Peta = { darat: FeatureCollection<Geometry, Prop>; batas: MultiLineString };
 
+/** Daratan gabungan yang sudah disederhanakan, cukup untuk peta besar (data/skrip/darat.mjs). */
+export async function muatDarat(): Promise<MultiPolygon> {
+  const r = await fetch(`${import.meta.env.BASE_URL}data/darat.json`);
+  return (await r.json()) as MultiPolygon;
+}
+
 export async function muatPeta(): Promise<Peta> {
   const r = await fetch(`${import.meta.env.BASE_URL}data/peta.json`);
   const topo = (await r.json()) as Topology<{ daerah: GeometryCollection<Prop> }>;
@@ -56,7 +62,7 @@ function titikTerdekat(pos: Map<string, [number, number]>, px: number, py: numbe
   return hasil;
 }
 
-export function gambarPetaBesar(wadah: HTMLElement, peta: Peta, warna: "status" | "rumpun", terpilih: string | null, pilih: (id: string) => void): void {
+export function gambarPetaBesar(wadah: HTMLElement, darat: MultiPolygon, warna: "status" | "rumpun", terpilih: string | null, pilih: (id: string) => void): void {
   const lebar = Math.max(300, wadah.clientWidth);
   const hp = lebar < 600;
   const tepi = hp ? 10 : 20;
@@ -65,14 +71,14 @@ export function gambarPetaBesar(wadah: HTMLElement, peta: Peta, warna: "status" 
   const diDalam = BAHASA.filter((b) => b.lat > -11.5 && b.lat < 6.5 && b.lon > 94 && b.lon < 142);
   const semua: FeatureCollection = {
     type: "FeatureCollection",
-    features: [...peta.darat.features, { type: "Feature", properties: {}, geometry: { type: "MultiPoint", coordinates: diDalam.map((b) => [b.lon, b.lat]) } }],
+    features: [{ type: "Feature", properties: {}, geometry: darat }, { type: "Feature", properties: {}, geometry: { type: "MultiPoint", coordinates: diDalam.map((b) => [b.lon, b.lat]) } }],
   };
   const proyeksi = geoMercator().fitWidth(lebar - 2 * tepi, semua);
   const [[x0, y0], [, y1]] = geoPath(proyeksi).bounds(semua);
   const [tx, ty] = proyeksi.translate();
   proyeksi.translate([tx - x0 + tepi, ty - y0 + tepi]);
   const tinggi = Math.ceil(y1 - y0 + 2 * tepi);
-  const jalur = geoPath(proyeksi);
+  const jalur = geoPath(proyeksi).digits(1);
   const r = hp ? 2.6 : 3.8;
   const pos = new Map<string, [number, number]>();
   // Bahasa yang lebih terancam digambar belakangan supaya tidak tertutup.
@@ -87,7 +93,7 @@ export function gambarPetaBesar(wadah: HTMLElement, peta: Peta, warna: "status" 
   const pilihan = terpilih ? pos.get(terpilih) : null;
   wadah.style.height = `${tinggi}px`;
   wadah.innerHTML = `<svg viewBox="0 0 ${lebar} ${tinggi}" width="${lebar}" height="${tinggi}" overflow="hidden">
-    <path class="darat" d="${jalur(peta.darat) ?? ""}"/>
+    <path class="darat" d="${jalur(darat) ?? ""}"/>
     <g>${titik}</g>
     ${pilihan ? `<circle class="cincin-pilih" cx="${pilihan[0]}" cy="${pilihan[1]}" r="${r + 6}"/>` : ""}
   </svg>`;

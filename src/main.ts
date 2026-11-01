@@ -23,6 +23,7 @@ import {
   statusOf,
   terdekat,
 } from "./data";
+import { htmlTetangga } from "./tetangga";
 import { type Peta, esc, gambarBatangStatus, gambarPetaBesar, gambarPetaKecil, gambarRumpun, gambarWilayah, legendaRumpun, legendaStatus, muatPeta } from "./vis";
 
 const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s)!;
@@ -143,6 +144,8 @@ function gambarDaerah() {
     .join("");
   if (peta) gambarPetaKecil($("#peta-kecil"), peta, daerahTerpilih, dekat);
   masukDaerah.value = daerahTerpilih.nama;
+  $("[data-tetangga]").innerHTML = htmlTetangga(daerahTerpilih.id, daerahTerpilih.nama, "lidah");
+
 }
 $("[data-dekat]").addEventListener("click", (e) => {
   const b = (e.target as HTMLElement).closest<HTMLElement>("[data-buka]");

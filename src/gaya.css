@@ -265,6 +265,15 @@ main,
   font-size: 13px;
   color: var(--tinta-2);
 }
+/* pesan tempat peta sebelum dibuat: tinggi = 0,3632 × (lebar − 2·tepi) + 2·tepi, seperti di vis.ts */
+.peta:empty {
+  padding-top: calc(36.32% + 25.5px);
+}
+@media (max-width: 631px) {
+  .peta:empty {
+    padding-top: calc(36.32% + 12.7px);
+  }
+}
 .peta {
   position: relative;
   margin-top: 12px;

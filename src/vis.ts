@@ -1,5 +1,6 @@
 import type { Feature, FeatureCollection, Geometry, MultiLineString, MultiPolygon } from "geojson";
 import { geoMercator, geoPath } from "d3-geo";
+import { jalurDatar, titikSudut } from "./datar";
 import { feature, mesh } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import { type Bahasa, type BahasaDekat, BAHASA, type Daerah, NAMA_RUMPUN, NAMA_STATUS, type Status, URUT_STATUS, WILAYAH, namaTampil, rumpunOf, statusOf } from "./data";
@@ -73,12 +74,12 @@ export function gambarPetaBesar(wadah: HTMLElement, darat: MultiPolygon, warna: 
     type: "FeatureCollection",
     features: [{ type: "Feature", properties: {}, geometry: darat }, { type: "Feature", properties: {}, geometry: { type: "MultiPoint", coordinates: diDalam.map((b) => [b.lon, b.lat]) } }],
   };
-  const proyeksi = geoMercator().fitWidth(lebar - 2 * tepi, semua);
-  const [[x0, y0], [, y1]] = geoPath(proyeksi).bounds(semua);
+  const proyeksi = geoMercator().fitWidth(lebar - 2 * tepi, titikSudut(semua));
+  const [[x0, y0], [, y1]] = jalurDatar(proyeksi).bounds(semua);
   const [tx, ty] = proyeksi.translate();
   proyeksi.translate([tx - x0 + tepi, ty - y0 + tepi]);
   const tinggi = Math.ceil(y1 - y0 + 2 * tepi);
-  const jalur = geoPath(proyeksi).digits(1);
+  const jalur = jalurDatar(proyeksi).digits(1);
   const r = hp ? 2.6 : 3.8;
   const pos = new Map<string, [number, number]>();
   // Bahasa yang lebih terancam digambar belakangan supaya tidak tertutup.

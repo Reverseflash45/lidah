@@ -6,6 +6,8 @@
 // Yang diambil: languoid tingkat "language" berkategori bahasa ibu lisan (Spoken L1 Language) yang
 // tercatat dituturkan di Indonesia (kode negara ID). Keluaran src/data/bahasa.json.
 import { readFileSync, writeFileSync } from "node:fs";
+import { geoContains } from "d3-geo";
+import { feature } from "topojson-client";
 
 const VERSI = "v5.2.1";
 const AKAR = `https://raw.githubusercontent.com/glottolog/glottolog-cldf/${VERSI}/cldf`;
@@ -88,6 +90,9 @@ if (process.argv.includes("--unduh")) {
 
 const mentah = JSON.parse(readFileSync("data/mentah/glottolog-id.json", "utf8"));
 const { daerah } = JSON.parse(readFileSync("data/mentah/daerah.json", "utf8"));
+const peta = JSON.parse(readFileSync("public/data/peta.json", "utf8"));
+const batasDaerah = feature(peta, peta.objects.daerah).features;
+const indeksDaerah = new Map(daerah.map((d, i) => [d.id, i]));
 
 const rad = (d) => (d * Math.PI) / 180;
 const jarakKm = (a, b, c, d) => {
@@ -95,17 +100,27 @@ const jarakKm = (a, b, c, d) => {
   return 2 * 6371.0088 * Math.asin(Math.min(1, Math.sqrt(h)));
 };
 
+/** Daerah yang batasnya memuat titik bahasa; bila titiknya di luar semua batas (laut, luar negeri), daerah
+    dengan titik tengah terdekat. Titik tengah saja bisa salah: Bonerate di Kepulauan Selayar lebih dekat ke
+    titik tengah Kab. Ende. */
+function daerahUntuk(b) {
+  const isi = batasDaerah.find((f) => geoContains(f, [b.lon, b.lat]));
+  if (isi && indeksDaerah.has(isi.properties.id)) return indeksDaerah.get(isi.properties.id);
+  let iDaerah = 0;
+  let terbaik = Infinity;
+  daerah.forEach((d, i) => {
+    const j = jarakKm(b.lat, b.lon, d.titik[1], d.titik[0]);
+    if (j < terbaik) [terbaik, iDaerah] = [j, i];
+  });
+  return iDaerah;
+}
+
 /** Wilayah dari provinsi daerah terdekat; Maluku dan Papua dipisah karena Papua sendiri punya ratusan bahasa. */
 const wilayah = (d) => (d.prov.startsWith("Papua") ? "Papua" : d.prov.startsWith("Maluku") ? "Maluku" : d.pulau);
 
 const bahasa = mentah.bahasa
   .map((b) => {
-    let iDaerah = 0;
-    let terbaik = Infinity;
-    daerah.forEach((d, i) => {
-      const j = jarakKm(b.lat, b.lon, d.titik[1], d.titik[0]);
-      if (j < terbaik) [terbaik, iDaerah] = [j, i];
-    });
+    const iDaerah = daerahUntuk(b);
     const jalur = (b.jalur ?? []).map((id) => mentah.nama[id]);
     return {
       id: b.id,

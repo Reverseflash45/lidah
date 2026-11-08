@@ -1,4 +1,9 @@
+import { geoContains } from "d3-geo";
+import type { FeatureCollection, Geometry } from "geojson";
+import { feature } from "topojson-client";
+import type { Topology } from "topojson-specification";
 import { describe, expect, it } from "vitest";
+import peta from "../public/data/peta.json";
 import { BAHASA, DAERAH, cariBahasa, hitungStatus, namaAsli, namaTampil, rumpunOf, rumpunTeratas, terdekat } from "./data";
 
 const bahasa = (nama: string) => BAHASA.find((b) => b.nama === nama)!;
@@ -28,6 +33,16 @@ describe("data Glottolog", () => {
     const papua = BAHASA.filter((b) => b.wilayah === "Papua");
     expect(papua.filter((b) => rumpunOf(b) === "papua").length).toBeGreaterThan(papua.length / 2);
     expect(rumpunOf(bahasa("Javanese"))).toBe("austronesia");
+  });
+
+  it("titik bahasa di dalam batas kabupaten/kota masuk ke daerah itu", () => {
+    const batas = feature(peta as unknown as Topology, (peta as unknown as Topology).objects.daerah) as FeatureCollection<Geometry, { id: string }>;
+    for (const b of BAHASA) {
+      const isi = batas.features.find((f) => geoContains(f, [b.lon, b.lat]));
+      if (isi) expect(DAERAH[b.daerah].id, b.nama).toBe(isi.properties.id);
+    }
+    expect(bahasa("Bonerate").wilayah).toBe("Sulawesi");
+    expect(bahasa("Ili'uun").wilayah).toBe("Maluku");
   });
 });
 

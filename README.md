@@ -34,7 +34,8 @@ ringkasan itu.
 
 Status adalah Agglomerated Endangerment Status Glottolog dengan nama mengikuti padanan
 istilah UNESCO (aman, rentan, terancam, sangat terancam, kritis, punah). Wilayah ditentukan
-dari kabupaten/kota terdekat dengan titik bahasa. Glottolog hanya menyimpan satu titik per
+dari kabupaten/kota tempat titik bahasa berada, atau yang titik tengahnya terdekat bila titik itu
+di laut atau di luar Indonesia. Glottolog hanya menyimpan satu titik per
 bahasa, jadi bahasa besar seperti Jawa dituturkan jauh melampaui titiknya.
 
 ## Warna
